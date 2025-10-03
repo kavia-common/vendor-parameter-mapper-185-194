@@ -1,0 +1,43 @@
+<div class="row mb-24">
+  <h2>History</h2>
+  <div class="row-right row">
+    <div class="field">
+      <label class="label">Vendor</label>
+      <select class="select" [(ngModel)]="vendorId" (change)="fetch()">
+        <option value="">All</option>
+        <option *ngFor="let v of vendors" [value]="v.id">{{ v.name }} ({{ v.code }})</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="label">Mapping ID</label>
+      <input class="input" [(ngModel)]="mappingId" (keyup.enter)="fetch()" placeholder="Enter mapping id" />
+    </div>
+    <button class="btn btn-outline" (click)="fetch()">Filter</button>
+  </div>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead class="thead">
+      <tr>
+        <th>Time</th>
+        <th>Vendor</th>
+        <th>Mapping</th>
+        <th>Action</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+      <tr *ngFor="let e of entries">
+        <td>{{ e.timestamp || e.created_at || e.updated_at | date:'short' }}</td>
+        <td>{{ e.vendor_id || '-' }}</td>
+        <td>{{ e.mapping_id || '-' }}</td>
+        <td><span class="badge">{{ e.action || e.event || 'update' }}</span></td>
+        <td><code>{{ e.details ? (e.details | json) : '-' }}</code></td>
+      </tr>
+      <tr *ngIf="entries.length === 0 && !loading">
+        <td colspan="5" class="text-muted" style="padding:18px;">No history entries.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

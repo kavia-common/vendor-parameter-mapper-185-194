@@ -1,0 +1,83 @@
+<div class="row mb-24">
+  <h2>Mappings</h2>
+  <div class="row-right row">
+    <div class="field">
+      <label class="label">Vendor</label>
+      <select class="select" [(ngModel)]="selectedVendorId" (change)="fetch()">
+        <option value="">All</option>
+        <option *ngFor="let v of vendors" [value]="v.id">{{ v.name }} ({{ v.code }})</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="label">Namespace</label>
+      <input class="input" [(ngModel)]="namespaceFilter" (keyup.enter)="fetch()" placeholder="default" />
+    </div>
+    <button class="btn btn-outline" (click)="fetch()">Filter</button>
+    <button class="btn btn-primary" (click)="openCreate()">New Mapping</button>
+  </div>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead class="thead">
+      <tr>
+        <th>ID</th>
+        <th>Vendor</th>
+        <th>Namespace</th>
+        <th>Version</th>
+        <th>Updated</th>
+        <th style="width:160px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+      <tr *ngFor="let m of mappings">
+        <td><code>{{ m.id }}</code></td>
+        <td>{{ m.vendor_id }}</td>
+        <td><span class="badge">{{ m.namespace }}</span></td>
+        <td>{{ m.version }}</td>
+        <td class="text-muted">{{ m.updated_at | date:'short' }}</td>
+        <td>
+          <div class="row">
+            <button class="btn btn-outline" (click)="openEdit(m)">Edit</button>
+            <button class="btn btn-outline" (click)="delete(m)" style="color:var(--op-error); border-color: rgba(239,68,68,0.35);">Delete</button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="mappings.length === 0 && !loading">
+        <td colspan="6" class="text-muted" style="padding:18px;">No mappings found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <div class="modal-header">
+      <strong>{{ editing ? 'Edit Mapping' : 'New Mapping' }}</strong>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="field" style="flex:1;">
+          <label class="label">Vendor</label>
+          <select class="select" [(ngModel)]="modalVendorId" [disabled]="!!editing">
+            <option [value]="''" disabled>Select vendor</option>
+            <option *ngFor="let v of vendors" [value]="v.id">{{ v.name }} ({{ v.code }})</option>
+          </select>
+        </div>
+        <div class="field" style="width:240px;">
+          <label class="label">Namespace</label>
+          <input class="input" [(ngModel)]="modalNamespace" />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Rules (CSV lines: input_param,output_param,transform?)</label>
+        <textarea class="textarea" rows="8" [(ngModel)]="modalRulesText"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="showModal=false">Cancel</button>
+      <button class="btn btn-primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,18 @@
-<div class="container">
-  <h1>{{ title }}</h1>
-</div>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="brand-badge">OP</div>
+      Ocean Professional
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Dashboard</a>
+      <a routerLink="/vendors" routerLinkActive="active" class="nav-link">Vendors</a>
+      <a routerLink="/mappings" routerLinkActive="active" class="nav-link">Mappings</a>
+      <a routerLink="/history" routerLinkActive="active" class="nav-link">History</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

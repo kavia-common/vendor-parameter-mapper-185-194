@@ -1,0 +1,43 @@
+<div class="card">
+  <h2 style="margin-bottom:8px;">Resolve Tester</h2>
+  <p class="text-muted mb-24">Quickly test mapping resolution for a vendor and parameters.</p>
+  <div class="row mb-12">
+    <div class="field" style="flex:1;">
+      <label class="label">Vendor ID</label>
+      <input class="input" [(ngModel)]="vendorId" placeholder="e.g. 66123abcde..." />
+    </div>
+    <div class="field" style="width:240px;">
+      <label class="label">Namespace</label>
+      <input class="input" [(ngModel)]="namespace" placeholder="default" />
+    </div>
+  </div>
+  <div class="row mb-12">
+    <div class="field" style="flex:1;">
+      <label class="label">Parameters (comma-separated)</label>
+      <input class="input" [(ngModel)]="parametersText" placeholder="sku, price, currency" />
+    </div>
+  </div>
+  <div class="field mb-12">
+    <label class="label">Values JSON</label>
+    <textarea class="textarea" rows="6" [(ngModel)]="valuesJson" spellcheck="false"></textarea>
+  </div>
+  <div class="row">
+    <button class="btn btn-primary" (click)="resolve()" [disabled]="resolving">
+      {{ resolving ? 'Resolving...' : 'Resolve' }}
+    </button>
+  </div>
+</div>
+
+<div class="mt-24" *ngIf="error">
+  <div class="card" style="border-left:4px solid var(--op-error);">
+    <strong style="color:var(--op-error);">Error</strong>
+    <div class="mt-16">{{ error }}</div>
+  </div>
+</div>
+
+<div class="mt-24" *ngIf="result">
+  <div class="card">
+    <h3>Result</h3>
+    <pre class="mt-16" style="white-space: pre-wrap;">{{ result | json }}</pre>
+  </div>
+</div>

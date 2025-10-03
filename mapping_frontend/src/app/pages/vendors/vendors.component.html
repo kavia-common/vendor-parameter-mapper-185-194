@@ -1,0 +1,80 @@
+<div class="row mb-24">
+  <h2>Vendors</h2>
+  <div class="row-right">
+    <button class="btn btn-primary" (click)="openCreate()">New Vendor</button>
+  </div>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead class="thead">
+      <tr>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th style="width:160px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+      <tr *ngFor="let v of vendors">
+        <td>{{ v.name }}</td>
+        <td><span class="badge">{{ v.code }}</span></td>
+        <td class="text-muted">{{ v.description || '-' }}</td>
+        <td>
+          <span class="badge" [style.background]="v.is_active ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)'" [style.color]="v.is_active ? '#065F46' : '#991B1B'">
+            {{ v.is_active ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td>
+          <div class="row">
+            <button class="btn btn-outline" (click)="openEdit(v)">Edit</button>
+            <button class="btn btn-outline" (click)="delete(v)" style="color:var(--op-error); border-color: rgba(239,68,68,0.35);">Delete</button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="vendors.length === 0 && !loading">
+        <td colspan="5" class="text-muted" style="padding:18px;">No vendors found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <div class="modal-header">
+      <strong>{{ editing ? 'Edit Vendor' : 'New Vendor' }}</strong>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="field" style="flex:1;">
+          <label class="label">Code</label>
+          <input class="input" [(ngModel)]="formCode" placeholder="unique-code" [disabled]="!!editing" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="field" style="flex:1;">
+          <label class="label">Name</label>
+          <input class="input" [(ngModel)]="formName" placeholder="Acme Inc." />
+        </div>
+        <div class="field" style="width:180px;">
+          <label class="label">Active</label>
+          <select class="select" [(ngModel)]="formIsActive">
+            <option [ngValue]="true">True</option>
+            <option [ngValue]="false">False</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <textarea class="textarea" rows="3" [(ngModel)]="formDescription"></textarea>
+      </div>
+      <div *ngIf="error" style="color:var(--op-error); font-size: 13px;">{{ error }}</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="showModal=false">Cancel</button>
+      <button class="btn btn-primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>
